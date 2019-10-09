@@ -20,3 +20,59 @@ module flowing_led(input clk,inout rst,output[7:0]led);
               light_reg <= {light_reg[6:0],light_reg[7]};//移位操作 第一次：000 0001 0
     assign led = light_reg;
 endmodule
+
+set_property IOSTANDARD LVCMOS33 [get_ports {led[7]}] 
+set_property IOSTANDARD LVCMOS33 [get_ports {led[6]}] 
+set_property IOSTANDARD LVCMOS33 [get_ports {led[5]}] 
+set_property IOSTANDARD LVCMOS33 [get_ports {led[4]}] 
+set_property IOSTANDARD LVCMOS33 [get_ports {led[3]}] 
+set_property IOSTANDARD LVCMOS33 [get_ports {led[2]}] 
+set_property IOSTANDARD LVCMOS33 [get_ports {led[1]}] 
+set_property IOSTANDARD LVCMOS33 [get_ports {led[0]}] 
+set_property IOSTANDARD LVCMOS33 [get_ports clk] 
+set_property IOSTANDARD LVCMOS33 [get_ports rst] 
+set_property PACKAGE_PIN K1 [get_ports {led[7]}] 
+set_property PACKAGE_PIN H6 [get_ports {led[6]}] 
+set_property PACKAGE_PIN H5 [get_ports {led[5]}] 
+set_property PACKAGE_PIN J5 [get_ports {led[4]}] 
+set_property PACKAGE_PIN K6 [get_ports {led[3]}] 
+set_property PACKAGE_PIN L1 [get_ports {led[2]}] 
+set_property PACKAGE_PIN M1 [get_ports {led[1]}] 
+set_property PACKAGE_PIN K3 [get_ports {led[0]}] 
+set_property PACKAGE_PIN P17 [get_ports clk] 
+set_property PACKAGE_PIN P15 [get_ports rst] 
+
+//激励测试文件
+`timescale 1ns / 1ps
+module test()
+    reg clk;
+    reg rst;
+    wire [3:0] led;
+    
+flowing_led u0(
+    .clk(clk);
+    .rst(rst);
+    .led(led);
+    
+parameter PERIOD = 10;
+
+always begin
+    clk = 1'b0;
+    #(PERIOD/2)clk = 1b'1;
+    #(PERIOD/2);
+emd
+
+initial begin
+    clk = 1'b0;
+    rst = 1'b0;
+    #100;
+    rst = 1'b1;
+    #100;
+    rst = 1'b0;
+    #100
+    rst = 1'b1;
+end
+endmodule
+
+
+
