@@ -1,0 +1,22 @@
+`timescale 1ns / 1ps
+
+module flowing_led(input clk,inout rst,output[7:0]led);
+    reg dir;
+    reg [23:0] cnt_reg;
+    reg[7:0] light_reg;
+    
+    always @(posedge clk)
+        begin
+            if(!rst)
+              cnt_reg <= 0;
+            else
+              cnt_reg <= cnt_reg + 1;
+        end
+    always @(posedge clk)
+        begin
+            if(!rst)
+              light_reg <= 8'h01;// 0000 0001。开始时，0000 0001
+            else if(cnt_reg == 24'hffffff)
+              light_reg <= {light_reg[6:0],light_reg[7]};//移位操作 第一次：000 0001 0
+    assign led = light_reg;
+endmodule
